@@ -89,3 +89,4 @@ service mysqld restart
 PATH=$PATH:/usr/local/mysql/bin
 echo "export PATH=$PATH:/usr/local/mysql/bin >> /etc/profile"
 source /etc/profile
+`

@@ -1,0 +1,90 @@
+[client]
+#password	= your_password
+port		= 3306
+socket		= /var/lib/mysql/mysql.sock
+[mysqld]
+user        = mysql
+port		= 3306
+socket		= /var/lib/mysql/mysql.sock
+datadir=/home/mysql/data
+key_buffer_size = 16M
+max_allowed_packet = 1M
+table_open_cache = 64
+sort_buffer_size = 512K
+net_buffer_length = 8K
+read_buffer_size = 256K
+read_rnd_buffer_size = 512K
+myisam_sort_buffer_size = 8M
+
+##增加的配置----------------------
+character-set-server = utf8
+collation-server = utf8_general_ci
+skip-external-locking
+skip-name-resolve
+#log-error = /home/mysql/logs/mysql_error.log
+#pid-file = /home/mysql/mysql.pid
+open_files_limit = 10240
+back_log = 600
+max_connections=501
+max_connect_errors = 6000
+wait_timeout=605800
+join_buffer_size = 4M
+thread_cache_size = 300
+query_cache_type = 1
+query_cache_size = 256M
+query_cache_limit = 2M
+query_cache_min_res_unit = 16k
+tmp_table_size = 256M
+max_heap_table_size = 256M
+key_buffer_size = 256M
+read_buffer_size = 1M
+read_rnd_buffer_size = 16M
+bulk_insert_buffer_size = 64M
+#lower_case_table_names=1
+default-storage-engine = INNODB
+innodb_buffer_pool_size = 2G
+innodb_log_buffer_size = 32M
+innodb_log_file_size = 128M
+#innodb_flush_method = O_DIRECT
+#thread_concurrency = 32
+long_query_time= 0.05
+#slow-query-log = on
+#slow-query-log-file = /usr/local/cluster/mysql_log/mysql-slow.log
+##增加的配置----------------------
+
+## ----------replication
+#server_id=173
+#binlog-do-db=gas
+#binlog_do_db=msht_tran
+#binlog-ignore-db=mysql
+#log-bin=msht-mysql-bin
+#binlog_cache_size=1M
+#binlog_format=mixed
+#expire_logs_days=7
+#slave_skip_errors=1062
+#log_bin_trust_function_creators=true
+## ----------replication
+
+log-bin=mysql-bin
+server-id=27
+
+[mysqldump]
+quick
+max_allowed_packet = 16M
+
+[mysql]
+no-auto-rehash
+
+[myisamchk]
+key_buffer_size = 20M
+sort_buffer_size = 20M
+read_buffer = 2M
+write_buffer = 2M
+
+[mysqlhotcopy]
+interactive-timeout
+##增加的配置----------------------
+[mysqld_safe]
+#log-error=/var/log/mysqld.log
+#pid-file=/var/run/mysqld/mysqld.pid
+##增加的配置----------------------

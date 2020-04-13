@@ -1,0 +1,112 @@
+[client]
+user            = root
+password	= mshtappMYSQL
+port		= 3306
+socket		= /var/lib/mysql/mysql.sock
+[mysqld]
+user        = mysql
+port		= 3306
+socket		= /var/lib/mysql/mysql.sock
+datadir=/home/mysql/data
+#批定用于索引的缓冲区大小，增加它可以得到更好的索引处理性能，对于内存在4GB左右的服务器来说，该参数可设置为256MB或384MB。
+key_buffer_size = 2048M 
+#设置在网络传输中一次消息传输量的最大值。客户端/服务器之间通信的缓存区的最大大小.系统默认值 为1MB，最大值是1GB，必须设置1024的倍数。
+max_allowed_packet = 20M
+#TCP/IP和套接字通信缓冲区大小,创建长度达net_buffer_length的行
+net_buffer_length = 16K
+
+max_connections=501
+max_connect_errors = 6000
+#表示针对所有threads的table cache总和 数目建议设置为max_connections*你的表数目，当然你可能也需要为一些临时表等对象预留
+table_open_cache = 10000
+# Sort_Buffer_Size 是一个connection级参数，在每个connection（session）第一次需要使用这个buffer的时候，一次性分配设置的内存。
+sort_buffer_size = 1M
+# MySql读入缓冲区大小。对表进行顺序扫描的请求将分配一个读入缓冲区，如果对表的顺序扫描请求非常频繁，频繁扫描进行得太慢，可以通过增加该变量值以及内存缓冲区大小提高其性能。
+read_buffer_size = 1M
+#进行排序查询时，MySql会首先扫描一遍该缓冲，以避免磁盘搜索，提高查询速度，如果需要排序大量数据，可适当调高该值
+read_rnd_buffer_size = 16M
+
+myisam_sort_buffer_size = 8M
+
+##增加的配置----------------------
+character-set-server = utf8
+collation-server = utf8_general_ci
+#使用–skip-external-locking MySQL选项以避免外部锁定。该选项默认开启
+skip-external-locking
+#选项就能禁用DNS解析，连接速度会快很多。不过，这样的话就不能在MySQL的授权表中使用主机名了而只能用ip格式
+skip-name-resolve
+#log-error = /home/mysql/log/mysql_error.log
+#pid-file = /home/mysql/mysql.pid
+long_query_time= 0.5
+slow-query-log = ON
+slow-query-log-file = /home/mysql/log/mysql-slow.log
+
+#指mysql能够打开的文件句柄数
+open_files_limit = 10240
+#在MYSQL暂时停止响应新请求之前，短时间内的多少个请求可以被存在堆栈中。
+#如果系统在短时间内有很多连接，则需要增大该参数的值，该参数值指定到来的TCP/IP连接的监听队列的大小。
+back_log = 600
+
+wait_timeout=605800
+##用于表间关联缓存的大小，和sort_buffer_size一样，该参数对应的分配内存也是每个连接独享。
+join_buffer_size = 8M
+thread_cache_size = 300
+query_cache_type = 1
+#DB在利用Query_cache工作时，要求该语句涉及的表在这段时间内没有发生变更。那如果该表在发生变更时，Query_cache里的数据又怎么处理呢？
+#首先要把Query_cache和该表相关的语句全部置为失效，然后在写入更新。那么如果Query_cache非常大，该表的查询结构又比较多，查询语句失效也慢，
+#一个更新或是Insert就会很慢，这样看到的就是Update或是Insert怎么这么慢了。
+#所以在数据库写入量或是更新量也比较大的系统，该参数不适合分配过大。而且在高并发，写入量大的系统，建议把该功能禁掉。
+query_cache_size = 256M
+#指定单个查询能够使用的缓冲区大小，缺省为1M
+query_cache_limit = 2M
+query_cache_min_res_unit = 16k
+# tmp_table_size 的默认大小是 32M。如果一张临时表超出该大小，MySQL产生一个 The table tbl_name is full 形式的错误，
+# 如果你做很多高级 GROUP BY 查询，增加 tmp_table_size 值。如果超过该值，则会将临时表写入磁盘。
+tmp_table_size = 512M
+max_heap_table_size = 256M
+
+bulk_insert_buffer_size = 64M
+#lower_case_table_names=1
+default-storage-engine = INNODB
+innodb_buffer_pool_size = 4G
+innodb_log_buffer_size = 32M
+innodb_log_file_size = 128M
+#innodb_flush_method = O_DIRECT
+#thread_concurrency = 32
+
+
+##增加的配置----------------------
+
+## ----------replication
+server_id=28
+binlog_do_db=examination
+binlog_cache_size=1M
+binlog_format=mixed
+expire_logs_days=7
+slave_skip_errors=1062
+log_bin_trust_function_creators=true
+## ----------replication
+
+
+log-bin=mysql-bin
+
+[mysqldump]
+quick
+max_allowed_packet = 16M
+
+[mysql]
+no-auto-rehash
+
+[myisamchk]
+key_buffer_size = 20M
+sort_buffer_size = 20M
+read_buffer = 2M
+write_buffer = 2M
+
+[mysqlhotcopy]
+interactive-timeout
+##增加的配置----------------------
+[mysqld_safe]
+#log-error=/var/log/mysqld.log
+#pid-file=/var/run/mysqld/mysqld.pid
+##增加的配置----------------------
